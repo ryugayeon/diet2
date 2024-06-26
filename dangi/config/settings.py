@@ -14,7 +14,7 @@ import secrets
 import pymysql
 pymysql.install_as_MySQLdb()
 from pathlib import Path
-from .my_settings import MY_SECRET, MY_DATABASES
+from .my_settings import MY_SECRET, MY_DATABASES, MY_ALLOWED_HOSTS, AWS_AUTH
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +29,7 @@ SECRET_KEY = MY_SECRET['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = MY_ALLOWED_HOSTS
 
 
 # Application definition
@@ -110,6 +110,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# AWS AUTH
+
+AWS_ACCESS_KEY_ID = AWS_AUTH['AWS_ACCESS_KEY_ID']
+
+AWS_SECRET_ACCESS_KEY = AWS_AUTH['AWS_SECRET_ACCESS_KEY']
+
+AWS_STORAGE_BUCKET_NAME = AWS_AUTH['AWS_STORAGE_BUCKET_NAME']
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/

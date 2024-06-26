@@ -1,4 +1,5 @@
 # diet/views.py
+from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,8 +8,9 @@ from .serializers import DietSerializer, DailyDietSerializer
 from user.models import User
 from user.models import DietPeriod
 from django.utils.dateparse import parse_datetime
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from datetime import datetime
+from .img_DeepLearning import img_S3FileManagement, img_Inference
 
 class DietMealsView(APIView):
 
@@ -275,3 +277,44 @@ class DailyDietKcalDifferenceView(APIView):
             kcal_difference_sum = 0
 
         return Response({'kcal_difference_sum': kcal_difference_sum}, status=status.HTTP_200_OK)
+
+
+class ImageInfo(APIView):
+    # 일단 AllowAny인데 추후 변경 가능
+    permission_classes = [IsAuthenticated]
+
+    def post(self, reqest):
+        if "img" not in reqest.FILES:
+            return JsonResponse({'error': 'No file provided'}, status=status.HTTP_204_NO_CONTENT)
+
+        # S3에 이미지 업로드
+        uploader = img_S3FileManagement.S3ImgUploader(file=reqest.FILES["img"])
+        imgurl = uploader.upload()
+
+        # url 따오기, 이미지 가져오기
+        urlmapper = img_S3FileManagement.S3ImgurlMapper(url=imgurl)
+        bytes_img = urlmapper.getImage()
+        mapped_url = urlmapper.urlmap()
+
+        # 이미지 추론
+        inference = img_Inference.DLInference(bytes_img=bytes_img)
+        foodmenu, quantity, kcal, carbo, protein, prov = inference.predict()
+
+        if foodmenu == 3:
+            uploader.delete(img_key=imgurl)
+            return JsonResponse({'error': '음식이 탐지되지 않았습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+        if foodmenu == 2:
+            uploader.delete(img_key=imgurl)
+            return JsonResponse({'error': '동전이 탐지되지 않았습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        return JsonResponse(
+            {
+                "food_name": foodmenu,
+                "img_url": mapped_url,
+                "calories": kcal,
+                "weight": quantity,
+                "carbohydrate": carbo,
+                "protein": protein,
+                "fat": prov
+            }
+        )

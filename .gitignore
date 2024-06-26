@@ -1,1 +1,3 @@
-./dangi/config/my_settings.py
+/dangi/config/my_settings.py
+/dangi/diet/models/keras/
+/dangi/diet/models/yolo/
