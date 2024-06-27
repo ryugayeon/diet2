@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="67a4658c-e07f-4bac-9372-a81759090dbc" name="danji_server">
+        <fileTransfer accessType="SFTP" host="ec2-43-203-68-109.ap-northeast-2.compute.amazonaws.com" port="22" sshConfigId="55cbdcdb-f840-4a9a-af41-83d70f6061ba" sshConfig="ubuntu@ec2-43-203-68-109.ap-northeast-2.compute.amazonaws.com:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
