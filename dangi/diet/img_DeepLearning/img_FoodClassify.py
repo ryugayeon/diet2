@@ -28,5 +28,5 @@ class FoodClassifier:
         y_pred = np.argmax(y_pred_prob[0])
 
         # foodmenu = self.foodnames[y_pred] !!!임시!!추후수정!!!!
-        foodmenu = int(y_pred)
-        return foodmenu
+        foodnum = int(y_pred) + 1
+        return foodnum

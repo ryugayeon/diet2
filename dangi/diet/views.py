@@ -165,6 +165,11 @@ class DietMealsView(APIView):
         previous_daily_diet.protein -= diet.protein
         previous_daily_diet.prov -= diet.prov
 
+        # S3에 올라간 이미지 삭제
+        imgdelete = img_S3FileManagement.S3ImgUploader(file=None)
+        imgdelete.delete(img_key=diet.food_img)
+
+
         # success_yn 업데이트
         diet_period = DietPeriod.objects.filter(user_seq=diet.user_seq).order_by('-start_dt').first()
         if not diet_period:
@@ -298,18 +303,18 @@ class ImageInfo(APIView):
 
         # 이미지 추론
         inference = img_Inference.DLInference(bytes_img=bytes_img)
-        foodmenu, quantity, kcal, carbo, protein, prov = inference.predict()
+        foodname, quantity, kcal, carbo, protein, prov, check = inference.predict()
 
-        if foodmenu == 3:
+        if check == 3:
             uploader.delete(img_key=imgurl)
             return JsonResponse({'error': '음식이 탐지되지 않았습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-        if foodmenu == 2:
+        if check == 2:
             uploader.delete(img_key=imgurl)
             return JsonResponse({'error': '동전이 탐지되지 않았습니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
         return JsonResponse(
             {
-                "food_name": foodmenu,
+                "food_name": foodname,
                 "img_url": mapped_url,
                 "calories": kcal,
                 "weight": quantity,

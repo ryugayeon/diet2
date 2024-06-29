@@ -24,19 +24,22 @@ class DLInference:
 
         # 그릇이나 동전이 탐지되지 않은 경우
         if output_dict in (3, 2):
-            return output_dict, output_dict, output_dict, output_dict, output_dict, output_dict
+            return output_dict, output_dict, output_dict, output_dict, output_dict, output_dict, output_dict
 
         # 음식 분류
         foodclassifier = FoodClassifier(dict=output_dict)
-        foodmenu = foodclassifier.menupredict()
+        foodnum = foodclassifier.menupredict()
 
         # 음식량 추정
         quantitypredictor = FoodQuantityPredictor(dict=output_dict)
         quantity_level = quantitypredictor.quantitypredict()
 
         # 음식 영양 정보 계산
-        foodinfochecker = FoodInfoChecker(foodmenu=foodmenu, quantity_level=quantity_level)
-        quantity, kcal, carbo, protein, prov = foodinfochecker.get_nutrition_info()
+        foodinfochecker = FoodInfoChecker(foodnum=foodnum, quantity_level=quantity_level)
+        foodname, quantity, kcal, carbo, protein, prov = foodinfochecker.get_nutrition_info()
+
+        # 별 문제 없으면 check=0
+        check = 0
 
 
-        return foodmenu, quantity, kcal, carbo, protein, prov
+        return foodname, quantity, kcal, carbo, protein, prov, check

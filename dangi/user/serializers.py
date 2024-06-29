@@ -88,11 +88,16 @@ class UserSignupSerializer(serializers.ModelSerializer):
 
         return user
 
+from rest_framework import serializers
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
+
 class UserLoginSerializer(serializers.Serializer):
     user_id = serializers.CharField(required=True)
     password = serializers.CharField(required=True, write_only=True)
     access = serializers.CharField(read_only=True)
     refresh = serializers.CharField(read_only=True)
+    height = serializers.FloatField(read_only=True)
 
     def validate(self, data):
         user_id = data.get('user_id')
@@ -111,7 +116,9 @@ class UserLoginSerializer(serializers.Serializer):
             'user_id': user.user_id,
             'access': str(refresh.access_token),
             'refresh': str(refresh),
+            'height': user.height  # height 값을 추가
         }
+
 
 class UserHeightDetailSerializer(serializers.ModelSerializer):
     class Meta:
@@ -152,7 +159,6 @@ class DietPeriodSerializer(serializers.ModelSerializer):
 
 
 class UserDietPeriodUpdateSerializer(serializers.Serializer):
-    user_seq = serializers.IntegerField()
     height = serializers.FloatField(required=False)
     weight = serializers.FloatField(required=False)
     goal_weight = serializers.FloatField(required=False)
@@ -219,4 +225,7 @@ class UserDietPeriodUpdateSerializer(serializers.Serializer):
         diet_period.daily_prov = daily_prov
         diet_period.save()
 
-        return user, diet_period
+        # Calculate recommended_period
+        recommended_period = int(total_kcal / 500) if total_kcal else 0
+
+        return user, diet_period, recommended_period

@@ -96,20 +96,20 @@ class DietPeriodView(APIView):
 
     def get(self, request):
         user = request.user
-        diet_period = DietPeriod.objects.filter(user_seq=user)
-        if not diet_period.exists():
+        try:
+            diet_period = DietPeriod.objects.filter(user_seq=user).latest('start_dt')
+        except DietPeriod.DoesNotExist:
             return Response({"detail": "다이어트 정보를 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = DietPeriodSerializer(diet_period, many=True)
+        serializer = DietPeriodSerializer(diet_period)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request):
         user = request.user
-        user_seq = user.user_seq
 
         serializer = UserDietPeriodUpdateSerializer(data=request.data)
         if serializer.is_valid():
-            user, diet_period = serializer.update(user, serializer.validated_data)
+            user, diet_period, recommended_period = serializer.update(user, serializer.validated_data)
             return Response({
                 "user_id": user.user_id,
                 "height": user.height,
@@ -123,7 +123,8 @@ class DietPeriodView(APIView):
                 "daily_kcal": diet_period.daily_kcal,
                 "daily_carbo": diet_period.daily_carbo,
                 "daily_protein": diet_period.daily_protein,
-                "daily_prov": diet_period.daily_prov
+                "daily_prov": diet_period.daily_prov,
+                "recommended_period": recommended_period  # Add recommended_period to the response
             }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

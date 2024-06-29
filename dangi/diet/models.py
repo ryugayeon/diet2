@@ -36,7 +36,7 @@ class Diet(models.Model):
 
 class Food(models.Model):
     food_seq = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     quantity = models.IntegerField()
     kcal = models.IntegerField()
     carbo = models.IntegerField()
@@ -46,10 +46,3 @@ class Food(models.Model):
     class Meta:
         db_table = 'food'
 
-class FoodAmount(models.Model):
-    food_amount_seq = models.AutoField(primary_key=True)
-    level = models.CharField(max_length=45, unique=True)
-    level_weight = models.FloatField()
-
-    class Meta:
-        db_table = 'food_amount'
