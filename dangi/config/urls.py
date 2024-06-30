@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from user.views import UserMemberView, CheckUserId, UserLogin, UserHeight, UserLogout, UserDeactivate, DietPeriodView, DietRecommendationView
-from diet.views import DietMealsView, DietByDateView, DailyDietByDateView, DailyDietByDateRangeView, DailyDietKcalDifferenceView, ImageInfo
+from diet.views import DietMealsView, DietByDateView, DailyDietByDateView, DailyDietByDateRangeView, DailyDietKcalDifferenceView, ImageInfo, UserDailyDietsView
 
 
 urlpatterns = [
@@ -41,6 +41,7 @@ urlpatterns = [
     path('diet/daily_meals/by-date/', DailyDietByDateView.as_view(), name='daily_diet_by_date'), #지정날짜의 일일 섭취량 조회
     path('diet/daily_meals/period/', DailyDietByDateRangeView.as_view(), name='daily_diet_by_date_range'), #시작일, 마지막일 기간동안의 일일섭취량 조회
     path('diet/progress/', DailyDietKcalDifferenceView.as_view(), name='daily_diet_kcal_difference'), #현재까지의 소모 칼로리 조회
-    path('diet/record/image/', ImageInfo.as_view(), name='image_info'),
+    path('diet/record/image/', ImageInfo.as_view(), name='image_info'),#UserDailyDietsView
+    path('diet/daily_meals/', UserDailyDietsView.as_view(), name='daily_diet'), # 해당 유저가 등록한 모든 일일 섭취량 조회
 
 ]

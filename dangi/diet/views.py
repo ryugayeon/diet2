@@ -26,6 +26,7 @@ class DietMealsView(APIView):
         if not diet_period:
             return Response({'error': 'Diet period not found'}, status=status.HTTP_404_NOT_FOUND)
         tdee = diet_period.tdee
+        daily_kcal = diet_period.daily_kcal
 
         data = request.data
         date_str = data.get('date')
@@ -56,7 +57,7 @@ class DietMealsView(APIView):
             daily_diet.prov += data.get('prov', 0)
 
         # success_yn 업데이트
-        daily_diet.success_yn = 'Y' if daily_diet.kcal < tdee else 'N'
+        daily_diet.success_yn = 'Y' if daily_diet.kcal < daily_kcal else 'N'
         daily_diet.save()
 
         # Diet 레코드 생성
@@ -251,6 +252,22 @@ class DailyDietByDateRangeView(APIView):
 
         if not daily_diets.exists():
             return Response({'error': 'No daily_diets found for the specified date range'},
+                            status=status.HTTP_404_NOT_FOUND)
+
+        serializer = DailyDietSerializer(daily_diets, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class UserDailyDietsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        # 인증된 사용자의 모든 daily_diet 레코드 찾기
+        daily_diets = DailyDiet.objects.filter(user_seq=user).order_by('date')
+
+        if not daily_diets.exists():
+            return Response({'error': 'No daily_diets found for the authenticated user'},
                             status=status.HTTP_404_NOT_FOUND)
 
         serializer = DailyDietSerializer(daily_diets, many=True)
