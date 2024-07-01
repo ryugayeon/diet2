@@ -9,6 +9,7 @@ class DailyDietSerializer(serializers.ModelSerializer):
 class DietSerializer(serializers.ModelSerializer):
     class Meta:
         model = Diet
+        model = Diet
         fields = '__all__'
 
 

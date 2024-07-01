@@ -12,6 +12,8 @@ class FoodQuantityPredictor:
         bestmodel = quantity_model
 
         coin_image = self.images_dict["coin"]
+        if not type(coin_image) == np.ndarray:
+            return 1
 
         dish_image = self.images_dict["dish"]
 

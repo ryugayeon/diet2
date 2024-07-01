@@ -335,9 +335,7 @@ class ImageInfo(APIView):
         if check == 3:
             uploader.delete(img_key=imgurl)
             return JsonResponse({'error': '음식이 탐지되지 않았습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-        if check == 2:
-            uploader.delete(img_key=imgurl)
-            return JsonResponse({'error': '동전이 탐지되지 않았습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+
 
         return JsonResponse(
             {

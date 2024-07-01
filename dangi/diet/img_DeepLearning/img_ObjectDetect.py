@@ -59,7 +59,19 @@ class ObjectDetector:
 
         # 동전(2)이 탐지되지 않으면
         if not 2 in class_ids:
-            return 2
+            for i in indices:
+                box = boxes[i]
+                left, top, width, height = box
+                class_id = class_ids[i]
+                # 동전:2 그릇:3
+                if class_id == 3:
+                    class_name = self.classes[class_id]
+                    cropped_image = self.image[top:top + height, left:left + width]
+                    output_dict[class_name] = cropped_image
+
+                output_dict["coin"] = 0
+
+                return output_dict
 
         # 객체 정보 출력
         for i in indices:

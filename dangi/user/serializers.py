@@ -212,8 +212,8 @@ class UserDietPeriodUpdateSerializer(serializers.Serializer):
         total_kcal = (diet_period.weight - diet_period.goal_weight) * 7700
         daily_kcal = tdee - (total_kcal / period if period > 0 else 0)
         daily_carbo = (daily_kcal * 0.5) / 4
-        daily_protein = (daily_kcal * 0.3) / 4
-        daily_prov = (daily_kcal * 0.2) / 9
+        daily_protein = (daily_kcal * 0.2) / 4
+        daily_prov = (daily_kcal * 0.3) / 9
 
         diet_period.bmr = bmr
         diet_period.tdee = tdee

@@ -23,20 +23,25 @@ class DLInference:
         output_dict = objectdetector.crop_image(layerOutputs)
 
         # 그릇이나 동전이 탐지되지 않은 경우
-        if output_dict in (3, 2):
-            return output_dict, output_dict, output_dict, output_dict, output_dict, output_dict, output_dict
+        if output_dict == 3:
+            return 0, 0, 0, 0, 0, 0, output_dict
 
         # 음식 분류
         foodclassifier = FoodClassifier(dict=output_dict)
-        foodnum = foodclassifier.menupredict()
+        foodmenu = foodclassifier.menupredict()
 
         # 음식량 추정
         quantitypredictor = FoodQuantityPredictor(dict=output_dict)
         quantity_level = quantitypredictor.quantitypredict()
 
         # 음식 영양 정보 계산
-        foodinfochecker = FoodInfoChecker(foodnum=foodnum, quantity_level=quantity_level)
-        foodname, quantity, kcal, carbo, protein, prov = foodinfochecker.get_nutrition_info()
+        foodinfochecker = FoodInfoChecker(foodmenu=foodmenu, quantity_level=quantity_level)
+        foodname, quantity, kcal, carbo, protein, prov, error = foodinfochecker.get_nutrition_info()
+
+        # 음식 DB와 일치하는 음식이 없는 경우
+        if error:
+            return "알 수 없는 음식", 0, 0, 0, 0, 0, error
+
 
         # 별 문제 없으면 check=0
         check = 0
