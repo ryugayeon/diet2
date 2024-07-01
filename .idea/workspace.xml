@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f1bb829-07a4-4b84-b7e5-9cb034b996cd" name="Changes" comment="" />
+    <list default="true" id="9f1bb829-07a4-4b84-b7e5-9cb034b996cd" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/dangi/diet/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/dangi/diet/views.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,8 +35,9 @@
   &quot;keyToString&quot;: {
     &quot;Python.fix_migrations.executor&quot;: &quot;Run&quot;,
     &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;13121def&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/final_project&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -128,6 +131,7 @@
       <option name="presentableId" value="Default" />
       <updated>1718691079423</updated>
       <workItem from="1719382285931" duration="519000" />
+      <workItem from="1719792856334" duration="10000" />
     </task>
     <servers />
   </component>

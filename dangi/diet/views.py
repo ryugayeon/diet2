@@ -1,4 +1,5 @@
 # diet/views.py
+from botocore.exceptions import ParamValidationError, ClientError
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -141,7 +142,8 @@ class DietMealsView(APIView):
         if not diet_period:
             return Response({'error': 'Diet period not found'}, status=status.HTTP_404_NOT_FOUND)
         tdee = diet_period.tdee
-        daily_diet.success_yn = 'Y' if daily_diet.kcal < tdee else 'N'
+        daily_kcal = diet_period.daily_kcal
+        daily_diet.success_yn = 'Y' if daily_diet.kcal < daily_kcal else 'N'
         daily_diet.save()
 
         # diet 값 저장
@@ -166,17 +168,25 @@ class DietMealsView(APIView):
         previous_daily_diet.protein -= diet.protein
         previous_daily_diet.prov -= diet.prov
 
-        # S3에 올라간 이미지 삭제
-        imgdelete = img_S3FileManagement.S3ImgUploader(file=None)
-        imgdelete.delete(img_key=diet.food_img)
-
+        # S3에 올라간 이미지 삭제 (diet.food_img가 None이 아닐 때만 삭제)
+        if diet.food_img:
+            imgdelete = img_S3FileManagement.S3ImgUploader(file=None)
+            try:
+                imgdelete.delete(img_key=diet.food_img)
+            except ParamValidationError as e:
+                return Response({'error': f'Parameter validation error: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
+            except ClientError as e:
+                return Response({'error': f'AWS Client error: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            except Exception as e:
+                return Response({'error': f'Unexpected error: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         # success_yn 업데이트
         diet_period = DietPeriod.objects.filter(user_seq=diet.user_seq).order_by('-start_dt').first()
         if not diet_period:
             return Response({'error': 'Diet period not found'}, status=status.HTTP_404_NOT_FOUND)
         tdee = diet_period.tdee
-        previous_daily_diet.success_yn = 'Y' if previous_daily_diet.kcal < tdee else 'N'
+        daily_kcal = diet_period.daily_kcal
+        previous_daily_diet.success_yn = 'Y' if previous_daily_diet.kcal < daily_kcal else 'N'
         previous_daily_diet.save()
 
         # Diet 레코드 삭제
@@ -284,7 +294,7 @@ class DailyDietKcalDifferenceView(APIView):
         if not diet_period:
             return Response({'error': 'Diet period not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        daily_kcal = diet_period.tdee
+        daily_kcal = diet_period.daily_kcal
 
         # 사용자의 모든 daily_diet 레코드 가져오기
         daily_diets = DailyDiet.objects.filter(user_seq=user)
