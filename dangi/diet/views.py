@@ -227,17 +227,21 @@ class DailyDietByDateView(APIView):
         if not date_obj:
             return Response({'error': 'Invalid date format'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # 특정 날짜와 일치하는 daily_diet 레코드 찾기
-        daily_diets = DailyDiet.objects.filter(date__date=date_obj.date()).order_by('-date')
+        # 인증된 사용자의 식별자 정보 가져오기
+        user = request.user
+        user_seq = user.user_seq
+
+        # 특정 날짜와 인증된 사용자와 일치하는 daily_diet 레코드 찾기
+        daily_diets = DailyDiet.objects.filter(user_seq=user_seq, date__date=date_obj.date()).order_by('-date')
 
         if not daily_diets.exists():
             return Response({'error': 'No daily_diets found for the specified date'}, status=status.HTTP_404_NOT_FOUND)
 
-        # 특정 날짜와 일치하는 daily_diet가 여러개인 경우
         # 가장 최근의 daily_diet 레코드 가져오기
         latest_daily_diet = daily_diets.first()
         serializer = DailyDietSerializer(latest_daily_diet)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class DailyDietByDateRangeView(APIView):
     permission_classes = [IsAuthenticated]
