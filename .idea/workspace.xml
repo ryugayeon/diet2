@@ -5,17 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f1bb829-07a4-4b84-b7e5-9cb034b996cd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dangi/diet/img_DeepLearning/img_FoodClassify.py" beforeDir="false" afterPath="$PROJECT_DIR$/dangi/diet/img_DeepLearning/img_FoodClassify.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dangi/diet/img_DeepLearning/img_FoodQuantity.py" beforeDir="false" afterPath="$PROJECT_DIR$/dangi/diet/img_DeepLearning/img_FoodQuantity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dangi/diet/img_DeepLearning/img_GetDBinfo.py" beforeDir="false" afterPath="$PROJECT_DIR$/dangi/diet/img_DeepLearning/img_GetDBinfo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dangi/diet/img_DeepLearning/img_Inference.py" beforeDir="false" afterPath="$PROJECT_DIR$/dangi/diet/img_DeepLearning/img_Inference.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dangi/diet/img_DeepLearning/img_ModelPreloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dangi/diet/img_DeepLearning/img_ModelPreloader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dangi/diet/img_DeepLearning/img_ObjectDetect.py" beforeDir="false" afterPath="$PROJECT_DIR$/dangi/diet/img_DeepLearning/img_ObjectDetect.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dangi/diet/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/dangi/diet/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dangi/diet/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/dangi/diet/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dangi/user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/dangi/user/serializers.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
